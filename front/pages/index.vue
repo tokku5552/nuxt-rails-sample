@@ -1,11 +1,20 @@
 <template>
   <section class="container">
     <h1 class=".title">Todoリスト</h1>
-    <v-row>
-      <v-input v-model="content" placeholder="タスクを入力してください" />
-      <v-btn elevation="2" @click="insert"> 追加 </v-btn>
-    </v-row>
-
+    <v-container>
+      <v-row>
+        <v-col cols="12" sm="12" md="10">
+          <v-text-field
+            v-model="content"
+            placeholder="タスクを入力してください"
+            outlined
+          />
+        </v-col>
+        <v-col cols="12" md="2">
+          <v-btn elevation="2" @click="insert"> 追加 </v-btn>
+        </v-col>
+      </v-row>
+    </v-container>
     <v-btn elevation="2">全て</v-btn>
     <v-btn elevation="2">作業前</v-btn>
     <v-btn elevation="2">作業中</v-btn>
