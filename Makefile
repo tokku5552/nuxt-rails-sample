@@ -24,10 +24,14 @@ log-app:
 	docker compose logs app
 log-app-watch:
 	docker compose logs --follow app
+ash:
+	docker compose exec web ash
 bash:
 	docker compose exec app bash
+web:
+	docker compose exec web yarn dev
 app:
 	docker compose exec app bundle install
-	docker compose exec app bundle exec rails s -p 3000 -b '0.0.0.0'
+	docker compose exec app bundle exec rails s -p 8000 -b '0.0.0.0'
 db:
 	docker compose exec db mysql -h localhost -ppassword
