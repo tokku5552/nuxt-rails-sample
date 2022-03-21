@@ -43,3 +43,17 @@ make app
 ```
 http://localhost:3000/
 
+- モデル追加
+```
+rails g model <name>
+```
+
+- コントローラー追加
+```
+rails g controller <name>
+```
+
+- マイグレーションファイルの実行
+```
+rake db:migrate
+```
