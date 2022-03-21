@@ -21,4 +21,25 @@ Things you may want to cover:
 
 * Deployment instructions
 
-* ...
+* Tips
+- 初期構築
+```
+rails new api --database=postgresql --skip-bundle --api
+```
+
+- 環境構築
+```
+make up
+make bash
+cd api
+bundle install
+bundle exec rails db:create
+```
+
+- 起動
+```
+make up
+make app
+```
+http://localhost:3000/
+
