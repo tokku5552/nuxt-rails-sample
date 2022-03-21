@@ -29,3 +29,5 @@ bash:
 app:
 	docker compose exec app bundle install
 	docker compose exec app bundle exec rails s -p 3000 -b '0.0.0.0'
+db:
+	docker compose exec db mysql -h localhost -ppassword
