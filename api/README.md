@@ -43,3 +43,58 @@ make app
 ```
 http://localhost:3000/
 
+- モデル追加
+```
+rails g model <name>
+```
+
+- コントローラー追加
+```
+rails g controller <name>
+```
+
+- マイグレーションファイルの実行
+```
+rake db:migrate
+```
+
+- テストデータ配置
+```
+make bash
+rails db:seed
+```
+
+## エンドポイント
+- get
+```
+curl -X GET http://localhost:8000/v1/todos
+```
+
+- show
+```
+curl -X GET http://localhost:8000/v1/todos/1
+```
+
+- create
+```
+curl -H "Accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d @message_body/body.json \
+     -X POST http://localhost:8000/v1/todos
+```
+
+- update
+```
+curl -H "Accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d @message_body/body.json \
+     -X PUT http://localhost:8000/v1/todos/1
+```
+
+- delete
+```
+curl -H "Accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d @message_body/body.json \
+     -X DELETE http://localhost:8000/v1/todos/3
+```
