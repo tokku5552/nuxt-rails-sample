@@ -67,7 +67,12 @@ rails db:seed
 ## エンドポイント
 - get
 ```
-curl http://localhost:8000/v1/todos
+curl -X GET http://localhost:8000/v1/todos
+```
+
+- show
+```
+curl -X GET http://localhost:8000/v1/todos/1
 ```
 
 - create
@@ -76,5 +81,20 @@ curl -H "Accept: application/json" \
      -H "Content-Type: application/json" \
      -d @message_body/body.json \
      -X POST http://localhost:8000/v1/todos
-     
+```
+
+- update
+```
+curl -H "Accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d @message_body/body.json \
+     -X PUT http://localhost:8000/v1/todos/1
+```
+
+- delete
+```
+curl -H "Accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d @message_body/body.json \
+     -X DELETE http://localhost:8000/v1/todos/3
 ```

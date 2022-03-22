@@ -7,7 +7,7 @@ class V1::TodosController < ApplicationController
     end
 
     def show
-        render json: @Todo
+        render json: @todo
     end
 
     def create
