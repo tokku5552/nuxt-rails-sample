@@ -20,28 +20,28 @@ class V1::TodosController < ApplicationController
     end
 
     def update
-        if @todo.update(todo_params)
-          render json: @todo
-        else
-          render json: @todo.errors
-        end
+      if @todo.update(todo_params)
+        render json: @todo
+      else
+        render json: @todo.errors
       end
+    end
     
-      def destroy
-        if @todo.destroy
-          render json: @todo
-        else
-          render json: @todo.errors
-        end
+    def destroy
+      if @todo.destroy
+        render json: @todo
+      else
+        render json: @todo.errors
       end
+    end
     
-      private
-    
-      def set_post
-        @todo = Todo.find(params[:id])
-      end
-    
-      def todo_params
-        params.require(:todo).permit(:content, :state)
-      end
+    private
+
+    def set_post
+      @todo = Todo.find(params[:id])
+    end
+  
+    def todo_params
+      params.require(:todo).permit(:content, :state)
+    end
 end

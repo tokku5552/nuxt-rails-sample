@@ -57,3 +57,24 @@ rails g controller <name>
 ```
 rake db:migrate
 ```
+
+- テストデータ配置
+```
+make bash
+rails db:seed
+```
+
+## エンドポイント
+- get
+```
+curl http://localhost:8000/v1/todos
+```
+
+- create
+```
+curl -H "Accept: application/json" \
+     -H "Content-Type: application/json" \
+     -d @message_body/body.json \
+     -X POST http://localhost:8000/v1/todos
+     
+```
