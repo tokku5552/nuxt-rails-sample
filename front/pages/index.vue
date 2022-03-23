@@ -33,7 +33,7 @@
         <tbody>
           <tr v-for="(item, index) in todos" :key="index">
             <td>{{ item.content }}</td>
-            <td>{{ item.created }}</td>
+            <!-- <td>{{ item.created }}</td> -->
             <td>
               <v-btn elevation="2">{{ item.state }}</v-btn>
             </td>
@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   data() {
@@ -55,15 +55,23 @@ export default {
     }
   },
   computed: {
-    ...mapState(['todos']),
+    ...mapState({
+      todos: (state) => state.todos.todos,
+    }),
   },
   methods: {
-    insert: function () {
-      if (this.content != '') {
-        this.$store.commit('insert', { content: this.content })
-        this.content = ''
-      }
-    },
+    // insert: function () {
+    //   if (this.content != '') {
+    //     this.$store.commit('insert', { content: this.content })
+    //     this.content = ''
+    //   }
+    // },
+    ...mapActions({
+      fetch: 'index/fetch',
+    }),
+  },
+  mounted: function () {
+    this.fetch()
   },
 }
 </script>
