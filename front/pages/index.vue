@@ -52,6 +52,7 @@ export default {
   data() {
     return {
       todos: [],
+      content: '',
     }
   },
   // computed: {
@@ -76,8 +77,8 @@ export default {
       })
     },
   },
-  // mounted: function () {
-  //   this.fetch()
-  // },
+  mounted: function () {
+    this.fetch()
+  },
 }
 </script>
