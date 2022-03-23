@@ -11,7 +11,7 @@
           />
         </v-col>
         <v-col cols="12" md="2">
-          <v-btn elevation="2" @click="insert"> 追加 </v-btn>
+          <v-btn elevation="2" @click="fetch"> 追加 </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -51,14 +51,14 @@ import { mapState, mapActions } from 'vuex'
 export default {
   data() {
     return {
-      content: '',
+      todos: [],
     }
   },
-  computed: {
-    ...mapState({
-      todos: (state) => state.todos.todos,
-    }),
-  },
+  // computed: {
+  //   ...mapState({
+  //     todos: (state) => state.todos,
+  //   }),
+  // },
   methods: {
     // insert: function () {
     //   if (this.content != '') {
@@ -66,12 +66,18 @@ export default {
     //     this.content = ''
     //   }
     // },
-    ...mapActions({
-      fetch: 'index/fetch',
-    }),
+    // ...mapActions({
+    //   fetch: 'index/fetch',
+    // }),
+    fetch() {
+      this.$axios.$get('/v1/todos').then((res) => {
+        console.log(res)
+        this.todos = res
+      })
+    },
   },
-  mounted: function () {
-    this.fetch()
-  },
+  // mounted: function () {
+  //   this.fetch()
+  // },
 }
 </script>
