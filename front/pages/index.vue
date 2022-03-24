@@ -33,7 +33,6 @@
         <tbody>
           <tr v-for="(item, index) in todos" :key="index">
             <td>{{ item.content }}</td>
-            <!-- <td>{{ item.created }}</td> -->
             <td>
               <v-btn elevation="2" @click="update(item)">{{
                 item.state
@@ -48,24 +47,30 @@
 </template>
 
 <script lang='ts'>
-import { mapState, mapActions } from 'vuex'
+import Vue from 'vue'
 import { Todo, State } from '../types/todo'
+import { ThisTypedComponentOptionsWithRecordProps } from 'vue/types/options'
 
-export default {
-  data(): {
-    todos: Todo[]
-    content: string
-  } {
+interface DataType {
+  todos: Todo[]
+  content: string
+}
+interface MethodType {
+  fetch(): void
+  add(): void
+  update(): void
+  remove(): void
+}
+interface ComputedType {}
+interface PropType {}
+
+export default Vue.extend({
+  data(): DataType {
     return {
       todos: [],
       content: '',
     }
   },
-  // computed: {
-  //   ...mapState({
-  //     todos: (state) => state.todos,
-  //   }),
-  // },
   methods: {
     fetch() {
       this.$axios.$get('/v1/todos').then((res) => {
@@ -121,7 +126,7 @@ export default {
       this.$axios
         .$delete(`/v1/todos/${todo.id}`, {
           todo: todo,
-        })
+        } as Object)
         .then((res) => {
           console.log(res)
           this.fetch()
@@ -134,5 +139,5 @@ export default {
   mounted: function () {
     this.fetch()
   },
-}
+} as ThisTypedComponentOptionsWithRecordProps<Vue, DataType, MethodType, ComputedType, PropType>)
 </script>
