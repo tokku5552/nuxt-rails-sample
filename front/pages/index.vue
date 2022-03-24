@@ -35,9 +35,11 @@
             <td>{{ item.content }}</td>
             <!-- <td>{{ item.created }}</td> -->
             <td>
-              <v-btn elevation="2">{{ item.state }}</v-btn>
+              <v-btn elevation="2" @click="update(item)">{{
+                item.state
+              }}</v-btn>
             </td>
-            <td><v-btn elevation="2">削除</v-btn></td>
+            <td><v-btn elevation="2" @click="remove(item)">削除</v-btn></td>
           </tr>
         </tbody>
       </template>
@@ -45,11 +47,15 @@
   </section>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapState, mapActions } from 'vuex'
+import { Todo, State } from '../types/todo'
 
 export default {
-  data() {
+  data(): {
+    todos: Todo[]
+    content: string
+  } {
     return {
       todos: [],
       content: '',
@@ -61,13 +67,20 @@ export default {
   //   }),
   // },
   methods: {
+    fetch() {
+      this.$axios.$get('/v1/todos').then((res) => {
+        console.log(res)
+        this.todos = res as Todo[]
+      })
+    },
     add() {
+      const todo: Todo = {
+        content: this.content,
+        state: State.planning,
+      }
       this.$axios
         .$post('/v1/todos', {
-          todo: {
-            content: this.content,
-            state: '作業中',
-          },
+          todo: todo,
         })
         .then((res) => {
           console.log(res)
@@ -77,11 +90,45 @@ export default {
           console.log(err)
         })
     },
-    fetch() {
-      this.$axios.$get('/v1/todos').then((res) => {
-        console.log(res)
-        this.todos = res
-      })
+    update(todo: Todo) {
+      switch (todo.state) {
+        case State.planning:
+          todo.state = State.doing
+          break
+        case State.doing:
+          todo.state = State.done
+          break
+        case State.done:
+          todo.state = State.planning
+          break
+        default:
+          console.log('State error')
+          return
+      }
+      this.$axios
+        .$put(`/v1/todos/${todo.id}`, {
+          todo: todo,
+        })
+        .then((res) => {
+          console.log(res)
+          this.fetch()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    remove(todo: Todo) {
+      this.$axios
+        .$delete(`/v1/todos/${todo.id}`, {
+          todo: todo,
+        })
+        .then((res) => {
+          console.log(res)
+          this.fetch()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
   },
   mounted: function () {
