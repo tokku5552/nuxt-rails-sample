@@ -11,7 +11,7 @@
           />
         </v-col>
         <v-col cols="12" md="2">
-          <v-btn elevation="2" @click="fetch"> 追加 </v-btn>
+          <v-btn elevation="2" @click="add"> 追加 </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -61,15 +61,22 @@ export default {
   //   }),
   // },
   methods: {
-    // insert: function () {
-    //   if (this.content != '') {
-    //     this.$store.commit('insert', { content: this.content })
-    //     this.content = ''
-    //   }
-    // },
-    // ...mapActions({
-    //   fetch: 'index/fetch',
-    // }),
+    add() {
+      this.$axios
+        .$post('/v1/todos', {
+          todo: {
+            content: this.content,
+            state: '作業中',
+          },
+        })
+        .then((res) => {
+          console.log(res)
+          this.fetch()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
     fetch() {
       this.$axios.$get('/v1/todos').then((res) => {
         console.log(res)
