@@ -11,7 +11,7 @@
           />
         </v-col>
         <v-col cols="12" md="2">
-          <v-btn elevation="2" @click="insert"> 追加 </v-btn>
+          <v-btn elevation="2" @click="add"> 追加 </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -33,11 +33,12 @@
         <tbody>
           <tr v-for="(item, index) in todos" :key="index">
             <td>{{ item.content }}</td>
-            <td>{{ item.created }}</td>
             <td>
-              <v-btn elevation="2">{{ item.state }}</v-btn>
+              <v-btn elevation="2" @click="update(item)">{{
+                item.state
+              }}</v-btn>
             </td>
-            <td><v-btn elevation="2">削除</v-btn></td>
+            <td><v-btn elevation="2" @click="remove(item)">削除</v-btn></td>
           </tr>
         </tbody>
       </template>
@@ -45,25 +46,98 @@
   </section>
 </template>
 
-<script>
-import { mapState } from 'vuex'
+<script lang='ts'>
+import Vue from 'vue'
+import { Todo, State } from '../types/todo'
+import { ThisTypedComponentOptionsWithRecordProps } from 'vue/types/options'
 
-export default {
-  data() {
+interface DataType {
+  todos: Todo[]
+  content: string
+}
+interface MethodType {
+  fetch(): void
+  add(): void
+  update(): void
+  remove(): void
+}
+interface ComputedType {}
+interface PropType {}
+
+export default Vue.extend({
+  data(): DataType {
     return {
+      todos: [],
       content: '',
     }
   },
-  computed: {
-    ...mapState(['todos']),
-  },
   methods: {
-    insert: function () {
-      if (this.content != '') {
-        this.$store.commit('insert', { content: this.content })
-        this.content = ''
+    fetch() {
+      this.$axios.$get('/v1/todos').then((res) => {
+        console.log(res)
+        this.todos = res as Todo[]
+      })
+    },
+    add() {
+      const todo: Todo = {
+        content: this.content,
+        state: State.planning,
       }
+      this.$axios
+        .$post('/v1/todos', {
+          todo: todo,
+        })
+        .then((res) => {
+          console.log(res)
+          this.fetch()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    update(todo: Todo) {
+      switch (todo.state) {
+        case State.planning:
+          todo.state = State.doing
+          break
+        case State.doing:
+          todo.state = State.done
+          break
+        case State.done:
+          todo.state = State.planning
+          break
+        default:
+          console.log('State error')
+          return
+      }
+      this.$axios
+        .$put(`/v1/todos/${todo.id}`, {
+          todo: todo,
+        })
+        .then((res) => {
+          console.log(res)
+          this.fetch()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    remove(todo: Todo) {
+      this.$axios
+        .$delete(`/v1/todos/${todo.id}`, {
+          todo: todo,
+        } as Object)
+        .then((res) => {
+          console.log(res)
+          this.fetch()
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     },
   },
-}
+  mounted: function () {
+    this.fetch()
+  },
+} as ThisTypedComponentOptionsWithRecordProps<Vue, DataType, MethodType, ComputedType, PropType>)
 </script>
