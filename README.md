@@ -1,5 +1,8 @@
 # nuxt-rails-sample
 
+## 構成図
+![](docs/archtecture.drawio.png)
+
 ## 開発環境
 - Nuxt側
 ```
