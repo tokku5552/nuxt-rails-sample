@@ -54,22 +54,6 @@ export class NuxtRailsSampleStack extends Stack {
       securityGroup: securityGroup,
       keyName: keyName,
       role: role,
-      // init: ec2.CloudFormationInit.fromConfigSets({
-      //   configSets: {
-      //     default: ['yumPreinstall', 'config'],
-      //   },
-      //   configs: {
-      //     yumPreinstall: new ec2.InitConfig([
-      //       ec2.InitPackage.yum('git'),
-      //       ec2.InitPackage.yum('nginx')
-      //     ])
-      //   }
-      // })
     })
-    // const handle = new ec2.InitServiceRestartHandle();
-    // ec2.CloudFormationInit.fromElements(
-    //   ec2.InitFile.fromString('/etc/nginx/nginx.conf', '', { serviceRestartHandles: [handle] })
-    // )
-
   }
 }
