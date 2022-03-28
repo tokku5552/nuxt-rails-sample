@@ -5,7 +5,7 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { InstanceTarget } from 'aws-cdk-lib/aws-elasticloadbalancingv2-targets';
 
-export class NuxtRailsSampleStack extends Stack {
+export class RailsSampleStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
@@ -73,5 +73,7 @@ export class NuxtRailsSampleStack extends Stack {
       port: 80,
       targets: [new InstanceTarget(instance, 80)]
     })
+
+    // RDS
   }
 }
