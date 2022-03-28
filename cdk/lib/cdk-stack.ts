@@ -2,6 +2,8 @@ import { Stack, StackProps } from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
+import { InstanceTarget } from 'aws-cdk-lib/aws-elasticloadbalancingv2-targets';
 
 export class NuxtRailsSampleStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -41,7 +43,7 @@ export class NuxtRailsSampleStack extends Stack {
       iam.ManagedPolicy.fromAwsManagedPolicyName("AmazonSSMManagedInstanceCore")
     );
 
-    new ec2.Instance(this, 'RailsInstance', {
+    const instance = new ec2.Instance(this, 'RailsInstance', {
       vpc,
       instanceName: 'RailsInstance',
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T2, ec2.InstanceSize.MICRO),
@@ -54,6 +56,22 @@ export class NuxtRailsSampleStack extends Stack {
       securityGroup: securityGroup,
       keyName: keyName,
       role: role,
+    })
+
+    const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {
+      vpc,
+      internetFacing: true,
+      securityGroup: securityGroup
+    })
+
+    const listener = lb.addListener('Listener', {
+      port: 80,
+      open: true
+    })
+
+    listener.addTargets('ApplicationFleet', {
+      port: 80,
+      targets: [new InstanceTarget(instance, 80)]
     })
   }
 }
