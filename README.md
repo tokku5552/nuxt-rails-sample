@@ -58,3 +58,19 @@ mysql -h <your_rds_endpoint> -u api -p
 ```
 aws ssm get-parameter --name "RailsApiRDS" --with-decryption
 ```
+
+- Nuxtのビルド
+```
+cd front
+npm run generate
+```
+
+- S3へのアップロード
+```
+aws s3 sync front/dist s3://nuxt.s3bucket/ --include "*"
+```
+
+- CloudFrontのキャッシュ削除
+```
+aws cloudfront create-invalidation --distribution-id XXXXXXXXXXXXXX --paths "/*"
+```
