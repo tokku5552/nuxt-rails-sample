@@ -45,12 +45,12 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/proxy'
   ],
-
-  axios: {
-    baseURL: 'http://localhost:8000'
-    // proxy: true
+  publicRuntimeConfig: {
+    axios: {
+      baseURL: process.env.API_BASE_URL || 'http://localhost:8000'
+      // proxy: true
+    },
   },
-
   // proxy: {
   //   '/api': {
   //     target: 'http://localhost:3000'
