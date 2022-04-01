@@ -5,9 +5,13 @@ import * as iam from 'aws-cdk-lib/aws-iam';
 import * as elbv2 from 'aws-cdk-lib/aws-elasticloadbalancingv2';
 import { InstanceTarget } from 'aws-cdk-lib/aws-elasticloadbalancingv2-targets';
 import * as rds from 'aws-cdk-lib/aws-rds';
+import * as acm from 'aws-cdk-lib/aws-certificatemanager';
+import * as route53 from 'aws-cdk-lib/aws-route53'
+import { LoadBalancerTarget } from 'aws-cdk-lib/aws-route53-targets'
+import { RailsProps } from '../bin/cdk'
 
 export class RailsSampleStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, props: RailsProps) {
     super(scope, id, props);
 
     // create VPC
@@ -66,17 +70,32 @@ export class RailsSampleStack extends Stack {
     const lb = new elbv2.ApplicationLoadBalancer(this, 'LB', {
       vpc,
       internetFacing: true,
-      securityGroup: securityGroupforEC2
+      securityGroup: securityGroupforEC2,
+      loadBalancerName: 'RailsLB'
     })
 
     const listener = lb.addListener('Listener', {
-      port: 80,
+      port: 443,
       open: true
     })
+    const cert = acm.Certificate.fromCertificateArn(this, 'CertificateFromArn', props.certificateArn);
+    listener.addCertificates('RailsListenerCertificate', [cert])
 
     listener.addTargets('ApplicationFleet', {
       port: 80,
       targets: [new InstanceTarget(instance, 80)]
+    })
+
+    // add Route 53 Record
+    const hostZone = route53.HostedZone.fromHostedZoneAttributes(this, 'HostedZoneAttributes', {
+      hostedZoneId: props.hostedZoneId,
+      zoneName: props.zoneName
+    })
+
+    new route53.ARecord(this, 'ARecord', {
+      zone: hostZone,
+      target: route53.RecordTarget.fromAlias(new LoadBalancerTarget(lb)),
+      recordName: 'api'
     })
 
     // RDS
