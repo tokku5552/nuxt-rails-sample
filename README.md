@@ -95,6 +95,8 @@ chmod 600 config
 
 - RDSへの接続先情報登録
 ```
+export AWS_ACCESS_KEY_ID=your_aws_access_key_id
+export AWS_SECRET_ACCESS_KEY=your_secret_access_key
 make up
 make bash
 bundle install
