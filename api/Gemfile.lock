@@ -116,7 +116,7 @@ GEM
     nokogiri (1.13.3)
       mini_portile2 (~> 2.8.0)
       racc (~> 1.4)
-    puma (5.6.2)
+    puma (5.6.4)
       nio4r (~> 2.0)
     racc (1.6.0)
     rack (2.2.3)
@@ -186,7 +186,7 @@ DEPENDENCIES
   capistrano3-puma
   listen (~> 3.3)
   mysql2 (~> 0.5)
-  puma (~> 5.0)
+  puma (>= 5.6.4)
   rack-cors
   rails (~> 6.1.5)
   spring
