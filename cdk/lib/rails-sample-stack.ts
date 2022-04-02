@@ -111,9 +111,20 @@ export class RailsSampleStack extends Stack {
       "Allow MySQL Access"
     )
     const engine = rds.DatabaseInstanceEngine.mysql({ version: rds.MysqlEngineVersion.VER_5_7_34 })
+    const parameterGroup = new rds.ParameterGroup(this, 'ParameterGroup', {
+      engine: engine,
+      parameters: {
+        character_set_client: 'utf8',
+        character_set_connection: 'utf8',
+        character_set_database: 'utf8mb4',
+        character_set_results: 'utf8',
+        character_set_server: 'utf8mb4',
+      },
+    });
     const db = new rds.DatabaseInstance(this, 'RailsRDS', {
       engine,
       vpc,
+      parameterGroup: parameterGroup,
       databaseName: 'api_production',
       instanceIdentifier: 'railsrds',
       instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.MICRO),
