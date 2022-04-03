@@ -36,7 +36,7 @@ jobs:
           AWS_DEFAULT_OUTPUT: json
           CDK_ENV: ${{ secrets.CDK_ENV }}
         run: |
-          cat $CDK_ENV > .env
+          echo "$CDK_ENV" > .env
           npx cdk deploy --all
   deploy_rails:
     runs-on: ubuntu-latest
