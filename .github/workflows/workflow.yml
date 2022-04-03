@@ -88,7 +88,9 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-1
           AWS_DEFAULT_OUTPUT: json
-          TARGET_INSTANCE_ID: ${{ secrets.TARGET_INSTANCE_ID }}
+          RAILS_ENV: ${{ secrets.RAILS_ENV }}
         working-directory: ./api
         run: |
+          echo "$RAILS_ENV" > .env
+          source .env
           bundle exec cap production deploy
