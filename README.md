@@ -19,6 +19,25 @@ make app
 http://localhost:8000/
 
 ## 本番環境
+必要な環境変数を設定する必要があります。
+- cdk/.env
+```
+HOSTED_ZONE_ID=
+ZONE_NAME=
+CERTIFICATE_ARN=
+KEY_NAME=
+```
+
+- api/.env
+```
+TARGET_INSTANCE_ID=
+```
+
+- front/.env
+```
+API_BASE_URL=
+```
+
 ### API側
 - パラメータストアにDBのパスワードを保存
 ```
@@ -111,18 +130,19 @@ db:
 
 - 一度デプロイを実行してmaster.keyを配置
 ```
-bundle exec cap production deploy
+source .env
+TARGET_INSTANCE_ID=$TARGET_INSTANCE_ID bundle exec cap production deploy
 
 # 「ERROR linked file /var/www/api/shared/config/master.key does not exist on your_servername」
 
 scp config/master.key your_server_name:/var/www/api/shared/config
-bundle exec cap production puma:config
-bundle exec cap production puma:systemd:config puma:systemd:enable
+TARGET_INSTANCE_ID=$TARGET_INSTANCE_ID bundle exec cap production puma:config
+TARGET_INSTANCE_ID=$TARGET_INSTANCE_ID bundle exec cap production puma:systemd:config puma:systemd:enable
 ```
 
 - 再度デプロイ
 ```
-bundle exec cap production deploy
+TARGET_INSTANCE_ID=$TARGET_INSTANCE_ID bundle exec cap production deploy
 ```
 
 - Nginxの設定
