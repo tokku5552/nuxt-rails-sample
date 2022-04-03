@@ -93,4 +93,4 @@ jobs:
         run: |
           echo "$RAILS_ENV" > .env
           source .env
-          TARGET_INSTANCE_ID=$TARGET_INSTANCE_ID} bundle exec cap production deploy
+          TARGET_INSTANCE_ID=$TARGET_INSTANCE_ID bundle exec cap production deploy
