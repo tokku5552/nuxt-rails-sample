@@ -50,7 +50,6 @@ export class RailsSampleStack extends Stack {
     );
 
     // create EC2 Instance
-    const keyName = process.env.KEY_NAME;
     const instance = new ec2.Instance(this, 'RailsInstance', {
       vpc,
       instanceName: 'RailsInstance',
@@ -62,7 +61,7 @@ export class RailsSampleStack extends Stack {
         subnetType: ec2.SubnetType.PUBLIC,
       },
       securityGroup: securityGroupforEC2,
-      keyName: keyName,
+      keyName: props.keyName,
       role: role,
     })
 
