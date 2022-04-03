@@ -82,14 +82,13 @@ jobs:
           touch /home/runner/.ssh/MyKeypair.pem
           echo "${{ secrets.SSH_DEPLOY_KEY }}" > /home/runner/.ssh/MyKeypair.pem
           chmod 600 /home/runner/.ssh/MyKeypair.pem
-          # known_hostsに追加
-          # ssh-keyscan i-087b508d64cd045d7 >> ~/.ssh/known_hosts
       - name: deploy to EC2
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-1
           AWS_DEFAULT_OUTPUT: json
+          TARGET_INSTANCE_ID: ${{ secrets.TARGET_INSTANCE_ID }}
         working-directory: ./api
         run: |
           bundle exec cap production deploy

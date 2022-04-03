@@ -1,4 +1,4 @@
-server "i-0f241afedc909bd71", user: "ec2-user", roles: %w{app db web}
+server ENV['TARGET_INSTANCE_ID'], user: "ec2-user", roles: %w{app db web}
 
 require 'net/ssh/proxy/command'
 set :ssh_options, {
