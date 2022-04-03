@@ -1,4 +1,4 @@
-server "i-087b508d64cd045d7", user: "ec2-user", roles: %w{app db web}
+server "i-0f241afedc909bd71", user: "ec2-user", roles: %w{app db web}
 
 require 'net/ssh/proxy/command'
 set :ssh_options, {
