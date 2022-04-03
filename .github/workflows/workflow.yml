@@ -29,9 +29,18 @@ jobs:
         run: npm install
       - name: cdk deploy
         working-directory: ./cdk
-        run: npx cdk deploy --all
-  deploy:
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-1
+          AWS_DEFAULT_OUTPUT: json
+          CDK_ENV: ${{ secrets.CDK_ENV }}
+        run: |
+          cat $CDK_ENV > .env
+          npx cdk deploy --all
+  deploy_rails:
     runs-on: ubuntu-latest
+    needs: deploy_cdk
     steps:
       - name: Checkout
         uses: actions/checkout@v2
