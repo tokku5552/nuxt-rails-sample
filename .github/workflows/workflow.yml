@@ -1,0 +1,63 @@
+name: deploy prd
+
+on:
+  push:
+    branches:
+      - main
+      - feature/#12_cicd
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: cache vendor
+        id: cache
+        uses: actions/cache@v2
+        with:
+          path: api/vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+      # Ruby をインストールする
+      - name: Set up Ruby 2.6.6
+        uses: actions/setup-ruby@v1
+        with:
+          ruby-version: 2.6.6
+      # バンドラーをインストールし、初期化する
+      - name: Bundle install
+        working-directory: ./api
+        run: |
+          gem install bundler
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+      # awscliのインストール
+      - name: install awscli
+        working-directory: ./api
+        run: |
+          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+          unzip awscliv2.zip
+          sudo ./aws/install --update
+          aws --version
+          curl "https://s3.amazonaws.com/session-manager-downloads/plugin/latest/ubuntu_64bit/session-manager-plugin.deb" -o "session-manager-plugin.deb"
+          sudo dpkg -i session-manager-plugin.deb
+      - name: setup ssh
+        working-directory: ./api
+        run: |
+          # sshキーをコピー
+          mkdir -p /home/runner/.ssh
+          touch /home/runner/.ssh/MyKeypair.pem
+          echo "${{ secrets.SSH_DEPLOY_KEY }}" > /home/runner/.ssh/MyKeypair.pem
+          chmod 600 /home/runner/.ssh/MyKeypair.pem
+          # known_hostsに追加
+          ssh-keyscan i-087b508d64cd045d7 >> ~/.ssh/known_hosts
+      - name: deploy to EC2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ap-northeast-1
+          AWS_DEFAULT_OUTPUT: json
+        working-directory: ./api
+        run: |
+          bundle exec cap production deploy
