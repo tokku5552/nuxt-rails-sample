@@ -22,7 +22,7 @@ jobs:
             ${{ runner.os }}-gems-
       # Ruby をインストールする
       - name: Set up Ruby 2.6.6
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@8f312efe1262fb463d906e9bf040319394c18d3e # v1.92
         with:
           ruby-version: 2.6.6
       # バンドラーをインストールし、初期化する
