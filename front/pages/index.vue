@@ -25,8 +25,8 @@
         <thead>
           <tr>
             <th class="text-left">タスク</th>
-            <th class="text-left">登録日時</th>
             <th class="text-left">状態</th>
+            <th class="text-left">削除</th>
             <th></th>
           </tr>
         </thead>
