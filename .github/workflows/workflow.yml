@@ -123,7 +123,10 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: ap-northeast-1
           AWS_DEFAULT_OUTPUT: json
+          FRONT_ENV: ${{ secrets.FRONT_ENV }}
         run: |
+          echo "$FRONT_ENV" > .env
+          source .env
           yarn generate
           aws s3 sync dist s3://nuxt.s3bucket/ --include "*"
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTIN_ID }} --paths "/*"
