@@ -19,5 +19,3 @@ WORKDIR /api
 COPY Gemfile /api/
 COPY Gemfile.lock /api/
 RUN bundle install
-
-EXPOSE 3000
