@@ -6,6 +6,16 @@ application up and running.
 Things you may want to cover:
 
 * Ruby version
+```bash:
+# ruby -v
+ruby 2.6.6p146 (2020-03-31 revision 67876) [x86_64-linux]
+# rails -v
+Rails 6.1.5
+# bundle -v
+Bundler version 1.17.2
+# gem -v
+3.0.3
+```
 
 * System dependencies
 
@@ -24,14 +34,13 @@ Things you may want to cover:
 * Tips
 - 初期構築
 ```
-rails new api --database=postgresql --skip-bundle --api
+rails new api --database=mysql --skip-bundle --api
 ```
 
 - 環境構築
 ```
 make up
 make bash
-cd api
 bundle install
 bundle exec rails db:create
 ```
