@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <section class="container">
     <h1 class=".title">Todoリスト</h1>
@@ -21,7 +22,7 @@
     <v-btn elevation="2">完了</v-btn>
 
     <v-simple-table>
-      <template v-slot:default>
+      <template #default>
         <thead>
           <tr>
             <th class="text-left">タスク</th>
@@ -46,35 +47,29 @@
   </section>
 </template>
 
-<script lang='ts'>
-import Vue from 'vue'
-import { Todo, State } from '../types/todo'
-import { ThisTypedComponentOptionsWithRecordProps } from 'vue/types/options'
+<script lang="ts">
+import { State, Todo } from '../types/todo'
 
 interface DataType {
   todos: Todo[]
   content: string
 }
-interface MethodType {
-  fetch(): void
-  add(): void
-  update(): void
-  remove(): void
-}
-interface ComputedType {}
-interface PropType {}
 
-export default Vue.extend({
+export default {
   data(): DataType {
     return {
       todos: [],
       content: '',
     }
   },
+  mounted() {
+    this.fetch()
+  },
   methods: {
-    fetch() {
-      this.$axios.$get('/v1/todos').then((res) => {
+    async fetch() {
+      await this.$axios.$get('/v1/todos').then((res: Todo[]) => {
         console.log(res)
+
         this.todos = res as Todo[]
       })
     },
@@ -85,13 +80,13 @@ export default Vue.extend({
       }
       this.$axios
         .$post('/v1/todos', {
-          todo: todo,
+          todo,
         })
-        .then((res) => {
+        .then((res: any) => {
           console.log(res)
           this.fetch()
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.log(err)
         })
     },
@@ -112,32 +107,29 @@ export default Vue.extend({
       }
       this.$axios
         .$put(`/v1/todos/${todo.id}`, {
-          todo: todo,
+          todo,
         })
-        .then((res) => {
+        .then((res: any) => {
           console.log(res)
           this.fetch()
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.log(err)
         })
     },
     remove(todo: Todo) {
       this.$axios
         .$delete(`/v1/todos/${todo.id}`, {
-          todo: todo,
+          todo,
         } as Object)
-        .then((res) => {
+        .then((res: any) => {
           console.log(res)
           this.fetch()
         })
-        .catch((err) => {
+        .catch((err: any) => {
           console.log(err)
         })
     },
   },
-  mounted: function () {
-    this.fetch()
-  },
-} as ThisTypedComponentOptionsWithRecordProps<Vue, DataType, MethodType, ComputedType, PropType>)
+}
 </script>
