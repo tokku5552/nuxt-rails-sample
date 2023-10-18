@@ -41,15 +41,16 @@ export default {
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
-  modules: [
-    '@nuxtjs/axios',
-    '@nuxtjs/proxy'
-  ],
+  modules: ['@nuxtjs/axios', '@nuxtjs/proxy'],
   publicRuntimeConfig: {
     axios: {
-      baseURL: process.env.API_BASE_URL || 'http://localhost:8000'
+      baseURL: process.env.API_BASE_URL || 'http://localhost:8000',
       // proxy: true
     },
+  },
+  axios: {
+    baseURL: process.env.API_BASE_URL || 'http://localhost:8000',
+    // proxy: true
   },
   // proxy: {
   //   '/api': {
